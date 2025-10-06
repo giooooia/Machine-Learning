@@ -59,6 +59,9 @@ def plot_categorical_bars(df, cat_cols, target='divorced'):
         plt.show()
         
         
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 def plot_target_correlations(df, target='divorced', annotate=True):
     """
     Visualizza le correlazioni delle feature numeriche con la variabile target.
@@ -76,7 +79,10 @@ def plot_target_correlations(df, target='divorced', annotate=True):
     sns.barplot(
         x=corr_target.values,
         y=corr_target.index,
-        palette=colors
+        palette=colors,
+        hue=corr_target.index,  # aggiunto per evitare warning
+        dodge=False,            # evita la separazione in barre multiple
+        legend=False
     )
 
     # Titoli e label
