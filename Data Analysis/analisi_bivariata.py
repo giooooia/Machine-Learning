@@ -46,18 +46,42 @@ def plot_numeric_boxplots_grid(df, num_cols, target='divorced', cols=3):
 def plot_categorical_bars(df, cat_cols, target='divorced'):
     """
     Crea un grafico a barre per ognuna delle variabili categoriche
-    passate in input tramite lista
+    passate in input tramite lista, mostrando le percentuali per target.
     """
     for col in cat_cols:
+        # Tabella percentuale
         tab = pd.crosstab(df[col], df[target], normalize='index') * 100
-        tab.plot(kind='bar', stacked=True, colormap='Set2', figsize=(5,3))
-        plt.title(f"{col} vs {target}")
-        plt.ylabel('% divorziati / non divorziati')
-        plt.xlabel(col)
-        plt.legend(title=target)
+        
+        # Impostazioni grafico
+        fig, ax = plt.subplots(figsize=(8, 5))  # grafico più largo
+        tab.plot(kind='bar', stacked=True, colormap='Set2', ax=ax)
+        
+        # Titoli e label
+        ax.set_title(f"{col} vs {target}", fontsize=14)
+        ax.set_ylabel('%', fontsize=12)
+        ax.set_xlabel(col, fontsize=12)
+        
+        # Annotazioni percentuali sopra le barre
+        for i, row in enumerate(tab.values):
+            bottom = 0
+            for j, val in enumerate(row):
+                if val > 0:
+                    ax.text(
+                        i, 
+                        bottom + val / 2, 
+                        f"{val:.1f}%", 
+                        ha='center', 
+                        va='center',
+                        fontsize=10,
+                        color='black'
+                    )
+                bottom += val
+        
+        # Migliora la leggibilità della legenda
+        ax.legend(title=target, bbox_to_anchor=(1.05, 1), loc='upper left')
+        
         plt.tight_layout()
         plt.show()
-        
         
 import matplotlib.pyplot as plt
 import seaborn as sns
