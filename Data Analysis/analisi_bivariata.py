@@ -43,48 +43,60 @@ def plot_numeric_boxplots_grid(df, num_cols, target='divorced', cols=3):
     plt.show()
     
 
-def plot_categorical_bars(df, cat_cols, target='divorced'):
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+def plot_target_distribution_by_categories(df, cat_cols, target='divorced'):
     """
-    Crea un grafico a barre per ognuna delle variabili categoriche
-    passate in input tramite lista, mostrando le percentuali per target.
+    Per ogni variabile categorica nella lista cat_cols, mostra la distribuzione dei valori
+    all'interno di ciascuna classe del target come barre impilate orizzontali con percentuali.
+    Sull'asse x compaiono solo le etichette 'Divorziato' e 'Non divorziato'.
     """
-    for col in cat_cols:
-        # Tabella percentuale
-        tab = pd.crosstab(df[col], df[target], normalize='index') * 100
-        
+    for cat_col in cat_cols:
+        # Tabella percentuale normalizzata per colonna (target)
+        tab = pd.crosstab(df[cat_col], df[target], normalize='columns') * 100
+
         # Impostazioni grafico
-        fig, ax = plt.subplots(figsize=(8, 5))  # grafico più largo
-        tab.plot(kind='bar', stacked=True, colormap='Set2', ax=ax)
-        
-        # Titoli e label
-        ax.set_title(f"{col} vs {target}", fontsize=14)
-        ax.set_ylabel('%', fontsize=12)
-        ax.set_xlabel(col, fontsize=12)
-        
-        # Annotazioni percentuali sopra le barre
-        for i, row in enumerate(tab.values):
-            bottom = 0
-            for j, val in enumerate(row):
+        fig, ax = plt.subplots(figsize=(8, 5))
+
+        # Barre impilate (orizzontali)
+        bottom = np.zeros(tab.shape[1])
+        colors = plt.get_cmap("Set2").colors  # palette di colori
+
+        for i, cat_value in enumerate(tab.index):
+            ax.bar(tab.columns, tab.loc[cat_value], bottom=bottom, label=cat_value, color=colors[i % len(colors)])
+
+            # Annotazioni percentuali
+            for j, val in enumerate(tab.loc[cat_value]):
                 if val > 0:
                     ax.text(
-                        i, 
-                        bottom + val / 2, 
-                        f"{val:.1f}%", 
-                        ha='center', 
+                        j,
+                        bottom[j] + val / 2,
+                        f"{val:.1f}%",
+                        ha='center',
                         va='center',
                         fontsize=10,
                         color='black'
                     )
-                bottom += val
-        
-        # Migliora la leggibilità della legenda
-        ax.legend(title=target, bbox_to_anchor=(1.05, 1), loc='upper left')
-        
+            bottom += tab.loc[cat_value].values
+
+        # Titoli e label
+        ax.set_ylabel('% all’interno del target', fontsize=12)
+        ax.set_xlabel('Stato civile', fontsize=12)
+        ax.set_title(f'Distribuzione di "{cat_col}" per {target}', fontsize=14)
+
+        # Etichette asse x personalizzate
+        x_labels = ['Non divorziato', 'Divorziato']
+        ax.set_xticks(range(len(tab.columns)))
+        ax.set_xticklabels(x_labels, fontsize=11)
+
+        # Legenda fuori dal grafico
+        ax.legend(title=cat_col, bbox_to_anchor=(1.05, 1), loc='upper left')
+
         plt.tight_layout()
         plt.show()
-        
-import matplotlib.pyplot as plt
-import seaborn as sns
+
 
 def plot_target_correlations(df, target='divorced', annotate=True):
     """
