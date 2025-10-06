@@ -16,26 +16,23 @@ def get_column_types(df, target='divorced'):
 def plot_numeric_boxplots_grid(df, num_cols, target='divorced', cols=3):
     """
     Crea un boxplot in griglia per le variabili numeriche.
-
-    Prende in input il dataframe, la lista degli attributi numerici, il target e il numero
-    di colonne della griglia
+    Sostituisce 0 e 1 con 'non divorced' e 'divorced' sull'asse x senza warnings.
     """
     n = len(num_cols)
-    rows = (n + cols - 1) // cols  # calcola numero di righe in base a quante colonne vogliamo per riga
+    rows = (n + cols - 1) // cols
     
     fig, axes = plt.subplots(rows, cols, figsize=(cols * 4, rows * 3))
     axes = axes.flatten()
     
-    # Mappa temporanea per etichette
-    label_map = {0: 'non divorced', 1: 'divorced'}
+    # Trasforma il target in categorico con nomi leggibili
+    df_plot = df.copy()
+    df_plot[target] = df_plot[target].map({0: 'non divorced', 1: 'divorced'}).astype('category')
     
     for i, col in enumerate(num_cols):
-        sns.boxplot(x=target, y=col, data=df, ax=axes[i])
+        sns.boxplot(x=target, y=col, data=df_plot, ax=axes[i])
         axes[i].set_title(col, fontsize=10)
         axes[i].set_xlabel('')
         axes[i].set_ylabel('')
-        # Sostituisci etichette asse x
-        axes[i].set_xticklabels([label_map[t] for t in sorted(df[target].unique())])
     
     # Rimuove subplot vuoti
     for j in range(i + 1, len(axes)):
