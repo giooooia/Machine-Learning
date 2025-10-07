@@ -1,6 +1,6 @@
 def analisi_univariata(df: Dataset):
-    numeriche=df.df.select_dtypes(include='number').columns.tolist()
-    categoriche=df.df.select_dtypes(include=['object','category','bool']).columns.tolist()
+    numeriche=df.dataset.select_dtypes(include='number').columns.tolist()
+    categoriche=df.dataset.select_dtypes(include=['object','category','bool']).columns.tolist()
 
     #preparo lo spazio grafico
 
@@ -13,21 +13,21 @@ def analisi_univariata(df: Dataset):
 
     for col in numeriche:
         print(f"\nVariabile numerica: {col}")
-        print(df.df[col].describe())
+        print(df.dataset[col].describe())
 
     for col in categoriche:
         print(f"\nVariabile categorica: {col}")
-        print(df.df[col].value_counts())
+        print(df.dataset[col].value_counts())
     
     for col in categoriche:
-        df.df[col].value_counts().plot(kind='bar', edgecolor='black', ax=axes[idx])
+        df.dataset[col].value_counts().plot(kind='bar', edgecolor='black', ax=axes[idx])
         axes[idx].set_title(f"Barchart di {col}")
         axes[idx].set_xlabel(col)
         axes[idx].set_ylabel('Frequenza')
         idx += 1
 
     for col in numeriche:
-        df.df[col].plot(kind='hist', bins=10, edgecolor='black', ax=axes[idx])
+        df.dataset[col].plot(kind='hist', bins=10, edgecolor='black', ax=axes[idx])
         axes[idx].set_title(f"Istogramma di {col}")
         axes[idx].set_xlabel(col)
         axes[idx].set_ylabel('Frequenza')
