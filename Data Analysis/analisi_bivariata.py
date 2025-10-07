@@ -12,7 +12,7 @@ def analisi_bivariata(df, target='divorced'):
     print(f"ANALISI BIVARIATA RISPETTO ALLA VARIABILE TARGET: '{target.upper()}'")
     print("="*80)
 
-    print("\n[1] Identificazione delle colonne numeriche e categoriche...\n")
+    print("\nIdentificazione delle colonne numeriche e categoriche...\n")
     num_cols, cat_cols = get_column_types(df, target)
     print(f"Variabili numeriche trovate ({len(num_cols)}): {num_cols}")
     print(f"Variabili categoriche trovate ({len(cat_cols)}): {cat_cols}")
