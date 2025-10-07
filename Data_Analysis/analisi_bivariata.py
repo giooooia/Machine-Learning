@@ -13,7 +13,7 @@ def analisi_bivariata(df, target='divorced'):
     print("="*80)
 
     print("\nIdentificazione delle colonne numeriche e categoriche...\n")
-    num_cols, cat_cols = get_column_types(df, target)
+    num_cols, cat_cols = get_column_types(df.dataset, target)
     print(f"Variabili numeriche trovate ({len(num_cols)}): {num_cols}")
     print(f"Variabili categoriche trovate ({len(cat_cols)}): {cat_cols}")
 
@@ -23,7 +23,7 @@ def analisi_bivariata(df, target='divorced'):
         print("ANALISI VARIABILI NUMERICHE (Boxplot rispetto al target)\n")
         print("Ogni grafico mostra la distribuzione di una variabile numerica\n"
               f"tra le due classi del target '{target}'.\n")
-        plot_numeric_boxplots_grid(df, num_cols, target)
+        plot_numeric_boxplots_grid(df.dataset, num_cols, target)
     else:
         print("\nNessuna variabile numerica trovata da analizzare.\n")
 
@@ -33,7 +33,7 @@ def analisi_bivariata(df, target='divorced'):
         print("ANALISI VARIABILI CATEGORICHE (Distribuzione percentuale rispetto al target)\n")
         print("Ogni grafico mostra la distribuzione percentuale delle categorie\n"
               f"per le due classi del target '{target}'.\n")
-        plot_target_distribution_by_categories(df, cat_cols, target)
+        plot_target_distribution_by_categories(df.dataset, cat_cols, target)
     else:
         print("\n Nessuna variabile categorica trovata da analizzare.\n")
 
@@ -42,7 +42,7 @@ def analisi_bivariata(df, target='divorced'):
     print("CORRELAZIONI DELLE VARIABILI NUMERICHE CON IL TARGET\n")
     print("Mostra la forza e la direzione (positiva/negativa) della correlazione lineare\n"
           f"tra le variabili numeriche e la variabile target '{target}'.\n")
-    plot_target_correlations(df, target)
+    plot_target_correlations(df.dataset, target)
 
     print("\n" + "="*80)
     print("Analisi bivariata completata con successo\n")
