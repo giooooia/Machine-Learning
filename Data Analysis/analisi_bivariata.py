@@ -2,6 +2,51 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+def analisi_bivariata(df, target='divorced'):
+    """
+    Esegue un'analisi bivariata completa tra le variabili indipendenti e la variabile target.
+    Mostra boxplot, distribuzioni categoriche e correlazioni con il target.
+    """
+    print("="*80)
+    print(f"ANALISI BIVARIATA RISPETTO ALLA VARIABILE TARGET: '{target.upper()}'")
+    print("="*80)
+
+    print("\n[1] Identificazione delle colonne numeriche e categoriche...\n")
+    num_cols, cat_cols = get_column_types(df, target)
+    print(f"Variabili numeriche trovate ({len(num_cols)}): {num_cols}")
+    print(f"Variabili categoriche trovate ({len(cat_cols)}): {cat_cols}")
+
+    # Analisi variabili numeriche
+    if num_cols:
+        print("\n" + "-"*80)
+        print("ANALISI VARIABILI NUMERICHE (Boxplot rispetto al target)\n")
+        print("Ogni grafico mostra la distribuzione di una variabile numerica\n"
+              f"tra le due classi del target '{target}'.\n")
+        plot_numeric_boxplots_grid(df, num_cols, target)
+    else:
+        print("\nNessuna variabile numerica trovata da analizzare.\n")
+
+    # Analisi variabili categoriche
+    if cat_cols:
+        print("\n" + "-"*80)
+        print("ANALISI VARIABILI CATEGORICHE (Distribuzione percentuale rispetto al target)\n")
+        print("Ogni grafico mostra la distribuzione percentuale delle categorie\n"
+              f"per le due classi del target '{target}'.\n")
+        plot_target_distribution_by_categories(df, cat_cols, target)
+    else:
+        print("\n Nessuna variabile categorica trovata da analizzare.\n")
+
+    # Correlazioni con il target
+    print("\n" + "-"*80)
+    print("CORRELAZIONI DELLE VARIABILI NUMERICHE CON IL TARGET\n")
+    print("Mostra la forza e la direzione (positiva/negativa) della correlazione lineare\n"
+          f"tra le variabili numeriche e la variabile target '{target}'.\n")
+    plot_target_correlations(df, target)
+
+    print("\n" + "="*80)
+    print("Analisi bivariata completata con successo\n")
+
+
 def get_column_types(df, target='divorced'):
     """
     Identifica le colonne numeriche e categoriche nel dataframe.
@@ -42,10 +87,6 @@ def plot_numeric_boxplots_grid(df, num_cols, target='divorced', cols=3):
     plt.tight_layout()
     plt.show()
     
-
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
 
 def plot_target_distribution_by_categories(df, cat_cols, target='divorced'):
     """
