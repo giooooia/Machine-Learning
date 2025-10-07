@@ -15,6 +15,15 @@ L’analisi è composta da tre macro-fasi:
 """
 
 def analisi_univariata(df: Dataset):
+
+    """prima di tutto controlliamo se il dataset è già stato preprocessato perchè se così fosse è necessario riconvertire i 
+    valori 0 e 1 assunti degli attributi categorici in valori bool, in modo da poterli analizzare correttamente"""
+    if df.preprocessed==True:
+        for col in df.df.columns:
+            valori = set(df.df[col].dropna().unique())
+            if valori == {0, 1} or valori == {1, 0}:
+                df.df[col] = df.df[col].replace({1: True, 0: False})
+        
     numeriche=df.df.select_dtypes(include='number').columns.tolist()
     categoriche=df.df.select_dtypes(include=['object','category','bool']).columns.tolist()
     """Utilizziamo select_dtypes() per distinguere le colonne in base al loro tipo:
