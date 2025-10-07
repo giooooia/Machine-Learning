@@ -1,7 +1,8 @@
 import os
 import pandas as pd
 from Data.dataset import Dataset
-
+from Data_Analysis.analisi_bivariata import analisi_bivariata
+from Data_Analysis.analisi_preliminare import statistiche_generali
 
 def carica_dataset(percorso=None):
     print("=== CARICAMENTO DATASET ===")
