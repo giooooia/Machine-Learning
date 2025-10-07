@@ -2,6 +2,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+from Data.dataset import Dataset
 
 def analisi_bivariata(df, target='divorced'):
     """
