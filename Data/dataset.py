@@ -18,10 +18,10 @@ class Dataset:
 
             # tarasformo gli attributi qualitativi ordinali in discreti
             self.dataset["education_level"] = self.dataset["education_level"].map(map_edu)
-            self.dataset = pd.get_dummies(self.dataset, columns=["employment_status"])
-            self.dataset = pd.get_dummies(self.dataset, columns=["religious_compatibility"])
-            self.dataset = pd.get_dummies(self.dataset, columns=["marriage_type"])
-            self.dataset = pd.get_dummies(self.dataset, columns=["conflict_resolution_style"])
+            self.dataset = pd.get_dummies(self.dataset, columns=["employment_status"], dtype = int)
+            self.dataset = pd.get_dummies(self.dataset, columns=["religious_compatibility"], dtype = int)
+            self.dataset = pd.get_dummies(self.dataset, columns=["marriage_type"], dtype = int)
+            self.dataset = pd.get_dummies(self.dataset, columns=["conflict_resolution_style"], dtype = int)
 
             self.preporcessed = True
         else:
