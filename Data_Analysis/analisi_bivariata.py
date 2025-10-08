@@ -9,9 +9,6 @@ def analisi_bivariata(df, target='divorced'):
     Esegue un'analisi bivariata completa tra le variabili indipendenti e la variabile target.
     Mostra boxplot, distribuzioni categoriche e correlazioni con il target.
     """
-    print("="*80)
-    print(f"ANALISI BIVARIATA RISPETTO ALLA VARIABILE TARGET: '{target.upper()}'")
-    print("="*80)
 
     print("\nIdentificazione delle colonne numeriche e categoriche...\n")
     num_cols, cat_cols = get_column_types(df.dataset, target)
