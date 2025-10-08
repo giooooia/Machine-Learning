@@ -6,8 +6,6 @@ from Data.dataset import Dataset
 
 def statistiche_generali(df: Dataset):
 
-    print('='*80, "ANALISI GENERALE DEL DATASET", '='*80, sep='\n', end='\n\n')
-
     shp = df.dataset.shape
     print(f'Il dataset ha {shp[0]} record da {shp[1]} attributi ciascuno\n\n')
 
