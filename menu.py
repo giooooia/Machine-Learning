@@ -1,3 +1,6 @@
+from Data.dataset import Dataset
+import os
+
 def carica_dataset(percorso=None):
     print("=== CARICAMENTO DATASET ===")
 
@@ -18,12 +21,21 @@ def carica_dataset(percorso=None):
         print(f"Errore nel caricamento: {e}")
         return None
     
-    
 def analizza_dati(df):
     """
     Mostra un menu per analizzare i dati e chiama la funzione appropriata
-    in base alla scelta dell'utente.
+    in base alla scelta dell'utente. Prima del menu chiede se utilizzare
+    il dataset preprocessato.
     """
+
+    # Chiede se usare il dataset preprocessato
+    usa_preprocessato = input("Vuoi eseguire l'analisi sul dataset preprocessato? (s/n): ").strip().lower()
+
+    if usa_preprocessato == "s":
+        print("Eseguo il preprocessing del dataset...")
+        df = df.preprocessing()
+        print("Preprocessing completato.\n")
+
     while True:
         print("\n=== MENU ANALISI DATI ===")
         print("1. Statistiche generali")
