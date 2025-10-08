@@ -1,4 +1,5 @@
 from Data.dataset import Dataset
+import matplotlib as plt
 
 """
 L’obiettivo di questa funzione (analisi_univariata) è quello di effettuare un’analisi descrittiva univariata sul dataset scelto, 
@@ -17,8 +18,8 @@ L’analisi è composta da tre macro-fasi:
 """
 
 def analisi_univariata(df: Dataset):
-    numeriche=df.df.select_dtypes(include='number').columns.tolist()
-    categoriche=df.df.select_dtypes(include=['object','category','bool']).columns.tolist()
+    numeriche=df.dataset.select_dtypes(include='number').columns.tolist()
+    categoriche=df.dataset.select_dtypes(include=['object','category','bool']).columns.tolist()
     """Utilizziamo select_dtypes() per distinguere le colonne in base al loro tipo:
         - Variabili numeriche: colonne di tipo int o float;
         - Variabili categoriche: colonne di tipo object, category o bool.
@@ -37,7 +38,7 @@ def analisi_univariata(df: Dataset):
 
     for col in numeriche:
         print(f"\nVariabile numerica: {col}")
-        print(df.df[col].describe())
+        print(df.dataset[col].describe())
     """Per ciascuna variabile numerica, viene utilizzato il metodo describe() di Pandas, che restituisce:
         - count → numero di valori non nulli;
         - mean → media aritmetica;
@@ -47,20 +48,20 @@ def analisi_univariata(df: Dataset):
 
     for col in categoriche:
         print(f"\nVariabile categorica: {col}")
-        print(df.df[col].value_counts())
+        print(df.dataset[col].value_counts())
 
     """Per ciascuna variabile categorica, viene stampata la frequenza assoluta di ogni categoria tramite value_counts().
        Questo permette di osservare la distribuzione delle modalità e di individuare eventuali squilibri o classi rare."""
     
     for col in categoriche: #Per ogni variabile categorica viene generato un grafico a barre (bar chart).
-        df.df[col].value_counts().plot(kind='bar', edgecolor='black', ax=axes[idx])
+        df.dataset[col].value_counts().plot(kind='bar', edgecolor='black', ax=axes[idx])
         axes[idx].set_title(f"Barchart di {col}")
         axes[idx].set_xlabel(col)
         axes[idx].set_ylabel('Frequenza')
         idx += 1
 
     for col in numeriche: #Per ogni variabile numerica viene creato un istogramma, che suddivide i valori in 10 intervalli (bins=10).
-        df.df[col].plot(kind='hist', bins=10, edgecolor='black', ax=axes[idx])
+        df.dataset[col].plot(kind='hist', bins=10, edgecolor='black', ax=axes[idx])
         axes[idx].set_title(f"Istogramma di {col}")
         axes[idx].set_xlabel(col)
         axes[idx].set_ylabel('Frequenza')
