@@ -70,5 +70,8 @@ def analisi_univariata(df: Dataset):
     plt.tight_layout()
     plt.show()
     plt.savefig('analisi_univariata.png')
+    
+    print("\n" + "="*80)
+    print("Analisi univariata completata con successo\n")
 
 
