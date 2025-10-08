@@ -40,25 +40,25 @@ def analizza_dati(df):
 
         elif scelta == "1":
             print("="*80)
-           
+            print("ANALISI PRELIMINARE")
             print("="*80)
             statistiche_generali(df)
 
         elif scelta == "2":
             print("="*80)
-            print(f"ANALISI UNIVARIATA")
+            print("ANALISI UNIVARIATA")
             print("="*80)
             analisi_univariata(df)
 
         elif scelta == "3":
             print("="*80)
-            print("\nANALISI BIVARIATA RISPETTO ALLA VARIABILE TARGET")
+            print("ANALISI BIVARIATA RISPETTO ALLA VARIABILE TARGET")
             print("="*80)
             analisi_bivariata(df)
 
         elif scelta == "4":
             print("="*80)
-            print("\nANALISI MULTIVARIATA")
+            print("ANALISI MULTIVARIATA")
             print("="*80)
             analisi_multivariata(df)
 
