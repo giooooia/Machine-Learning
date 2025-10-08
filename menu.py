@@ -1,8 +1,3 @@
-import os
-import pandas as pd
-from Data.dataset import Dataset
-
-
 def carica_dataset(percorso=None):
     print("=== CARICAMENTO DATASET ===")
 
@@ -44,19 +39,27 @@ def analizza_dati(df):
             break
 
         elif scelta == "1":
-            print("\nSTATISTICHE GENERALI")
+            print("="*80)
+           
+            print("="*80)
             statistiche_generali(df)
 
         elif scelta == "2":
-            print("\nANALISI UNIVARIATA")
+            print("="*80)
+            print(f"ANALISI UNIVARIATA")
+            print("="*80)
             analisi_univariata(df)
 
         elif scelta == "3":
-            print("\nANALISI BIVARIATA")
+            print("="*80)
+            print("\nANALISI BIVARIATA RISPETTO ALLA VARIABILE TARGET")
+            print("="*80)
             analisi_bivariata(df)
 
         elif scelta == "4":
+            print("="*80)
             print("\nANALISI MULTIVARIATA")
+            print("="*80)
             analisi_multivariata(df)
 
         else:
