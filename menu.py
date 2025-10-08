@@ -18,6 +18,7 @@ def carica_dataset(percorso=None):
     try:
         df = Dataset(str(percorso))
         print("Dataset caricato correttamente!")
+        return df
     except Exception as e:
         print(f"Errore nel caricamento: {e}")
         return None
