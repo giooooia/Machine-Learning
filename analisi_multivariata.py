@@ -7,9 +7,15 @@ import matplotlib.pyplot as plt
 
 def analisi_multivariata(df: Dataset, fig_size: list = [8, 6]):
 
-    df.dataset = df.dataset.drop(columns=['divorced'], errors='ignore') # per l'analisi droppiamo le labels
+    if df.preprocessed == False:
+      print("L'analisi verrà eseguita solamenete sui valori quantitativi")
+      df_dataset = df.dataset.select_dtypes(include=[np.number])
+    else:
+      df_dataset = df.dataset
+
+    df_dataset = df_dataset.drop(columns=['divorced'], errors='ignore') # per l'analisi droppiamo le labels
     # correlazione lineare
-    corr = df.dataset.corr()
+    corr = df_dataset.corr()
     plt.figure(figsize=fig_size)
     sns.heatmap(corr, cmap="coolwarm", center=0, vmin=-1, vmax=1)
     plt.title('Matrice di correlazione (Pearson)')
@@ -17,7 +23,7 @@ def analisi_multivariata(df: Dataset, fig_size: list = [8, 6]):
 
     # correlazione non lineare
     plt.figure(figsize=fig_size)
-    corr_spearman = df.dataset.corr(method='spearman')
+    corr_spearman = df_dataset.corr(method='spearman')
     sns.heatmap(corr_spearman,cmap="coolwarm", center=0, vmin=-1, vmax=1)
     plt.title('Correlazione di Spearman (non lineare)')
     plt.show()
