@@ -18,8 +18,17 @@ L’analisi è composta da tre macro-fasi:
 """
 
 def analisi_univariata(df: Dataset):
-    numeriche=df.dataset.select_dtypes(include='number').columns.tolist()
-    categoriche=df.dataset.select_dtypes(include=['object','category','bool']).columns.tolist()
+
+    """prima di tutto controlliamo se il dataset è già stato preprocessato perchè se così fosse è necessario riconvertire i 
+    valori 0 e 1 assunti degli attributi categorici in valori bool, in modo da poterli analizzare correttamente"""
+    if df.preprocessed==True:
+        for col in df.df.columns:
+            valori = set(df.df[col].dropna().unique())
+            if valori == {0, 1} or valori == {1, 0}:
+                df.df[col] = df.df[col].replace({1: True, 0: False})
+        
+    numeriche=df.df.select_dtypes(include='number').columns.tolist()
+    categoriche=df.df.select_dtypes(include=['object','category','bool']).columns.tolist()
     """Utilizziamo select_dtypes() per distinguere le colonne in base al loro tipo:
         - Variabili numeriche: colonne di tipo int o float;
         - Variabili categoriche: colonne di tipo object, category o bool.
@@ -38,7 +47,7 @@ def analisi_univariata(df: Dataset):
 
     for col in numeriche:
         print(f"\nVariabile numerica: {col}")
-        print(df.dataset[col].describe())
+        print(df.df[col].describe())
     """Per ciascuna variabile numerica, viene utilizzato il metodo describe() di Pandas, che restituisce:
         - count → numero di valori non nulli;
         - mean → media aritmetica;
@@ -48,20 +57,20 @@ def analisi_univariata(df: Dataset):
 
     for col in categoriche:
         print(f"\nVariabile categorica: {col}")
-        print(df.dataset[col].value_counts())
+        print(df.df[col].value_counts())
 
     """Per ciascuna variabile categorica, viene stampata la frequenza assoluta di ogni categoria tramite value_counts().
        Questo permette di osservare la distribuzione delle modalità e di individuare eventuali squilibri o classi rare."""
     
     for col in categoriche: #Per ogni variabile categorica viene generato un grafico a barre (bar chart).
-        df.dataset[col].value_counts().plot(kind='bar', edgecolor='black', ax=axes[idx])
+        df.df[col].value_counts().plot(kind='bar', edgecolor='black', ax=axes[idx])
         axes[idx].set_title(f"Barchart di {col}")
         axes[idx].set_xlabel(col)
         axes[idx].set_ylabel('Frequenza')
         idx += 1
 
     for col in numeriche: #Per ogni variabile numerica viene creato un istogramma, che suddivide i valori in 10 intervalli (bins=10).
-        df.dataset[col].plot(kind='hist', bins=10, edgecolor='black', ax=axes[idx])
+        df.df[col].plot(kind='hist', bins=10, edgecolor='black', ax=axes[idx])
         axes[idx].set_title(f"Istogramma di {col}")
         axes[idx].set_xlabel(col)
         axes[idx].set_ylabel('Frequenza')
@@ -70,8 +79,5 @@ def analisi_univariata(df: Dataset):
     plt.tight_layout()
     plt.show()
     plt.savefig('analisi_univariata.png')
-    
-    print("\n" + "="*80)
-    print("Analisi univariata completata con successo\n")
 
 
