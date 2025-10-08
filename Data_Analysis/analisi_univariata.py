@@ -1,5 +1,5 @@
 from Data.dataset import Dataset
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 """
 L’obiettivo di questa funzione (analisi_univariata) è quello di effettuare un’analisi descrittiva univariata sul dataset scelto, 
