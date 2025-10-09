@@ -3,73 +3,39 @@ from sklearn.feature_selection import VarianceThreshold
 from sklearn.feature_selection import SelectKBest, mutual_info_classif
 from sklearn.model_selection import train_test_split
 import pandas as pd
+from utils import *
 
 class Dataset:
-    def __init__(self, csv_path: str):
-        self.dataset = pd.read_csv(csv_path)
-        self.preprocessed = False
-        self.standardized = False
-
-    def preProcessing(self):  
-        """
-        Trasformazione le variabili qualitative in quantitative
-        """
+    def __init__(self, csv_path: str, test_size = 0.2):
         
-        if not self.preprocessed:
-            map_edu = {
-                "No Formal Education": 0,
-                "High School": 1,
-                "Bachelor": 2,
-                "Master": 3,
-                "PhD": 4
-            }
-
-            # Trasformo gli attributi qualitativi ordinali in discreti
-            self.dataset["education_level"] = self.dataset["education_level"].map(map_edu)
-            self.dataset = pd.get_dummies(self.dataset, columns=["employment_status"], dtype=int)
-            self.dataset = pd.get_dummies(self.dataset, columns=["religious_compatibility"], dtype=int)
-            self.dataset = pd.get_dummies(self.dataset, columns=["marriage_type"], dtype=int)
-            self.dataset = pd.get_dummies(self.dataset, columns=["conflict_resolution_style"], dtype=int)
-
-            self.preprocessed = True
-            print("Dataset preprocessato con successo")
-        else:
-            print("Preprocessing già effettuato")
-            
-    def split(self):
-        """"
-        Splitta il dataset in training set(80%) e test set(20%)
-        """
-        
-        if self.preprocessed:
-            X = self.dataset.drop(columns=['divorced'])
-            y = self.dataset['divorced']
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 30,
+        # carica e trasforma il dataset
+        dataset = trasformazione_attributi(pd.read_csv(csv_path))
+        self.columns = self.dataset.columns
+        X = dataset.drop(columns=['divorced'])
+        y = dataset['divorced']
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size = test_size, random_state = 30,
                                                                 stratify= y)
-            return X_train, X_test, y_train, y_test
-            
-        else: print("Operazione non riuscita. E' necessario preprocessare prima il dataset")
-        
+        self.standardize = False
         
     def standardize(self):
         """
         Standardizzazione solo delle colonne numeriche continue.
         """
-        if self.preprocessed:
-            if not self.standardized:
-                # Seleziona solo colonne numeriche originali
-                numeric_cols = ["age_at_marriage", "marriage_duration_years", "num_children",
-                                "education_level", "combined_income", "cultural_background_match",
-                                "communication_score", "conflict_frequency", "financial_stress_level",
-                                "mental_health_issues"]  # adatta alla tua lista
-                scaler = StandardScaler()
-                self.dataset[numeric_cols] = scaler.fit_transform(self.dataset[numeric_cols])
-                self.standardized = True
-                print("Dataset standardizzato con successo")
-            else:
-                print("Dataset già standardizzato")
+        if not self.standardized:
+            # applico la standardizzazione solo agli attributi numerici, su cui ha effettivamente senso farla (su quelli nominali non ordinabili è già stata applicata una codifica one-hot)
+            numeric_cols = ["age_at_marriage", "marriage_duration_years", "numS_children",
+                            "education_level", "combined_income", "cultural_background_match",
+                            "communication_score", "conflict_frequency", "financial_stress_level",
+                            "mental_health_issues"]
+            scaler = StandardScaler()
+            
+            # applico la trasformazione su tutto il dataset sulla base dei pararmetri calcolati sul training setS
+            self.X_train[numeric_cols] = scaler.fit_transform(self.X_train)
+            self.X_test[numeric_cols] = scaler.transform(self.X_test[numeric_cols])
+            self.standardized = True
+            print("Dataset standardizzato con successo")
         else:
-            print("Prima è necessario preprocessare il dataset")
+            print("Dataset già standardizzato")
 
                 
     def feature_selection_by_variance(self, threshold: float = 0.1):
